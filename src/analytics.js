@@ -214,6 +214,24 @@ Itunes.prototype.getAPIURL = function(uri, callback) {
   });
 }
 
+Itunes.prototype.getAPIURL_plain = function(uri, callback) {
+  async.whilst((callback) => {
+    callback(null, this._queue.paused);
+  }, (callback) => {
+    setTimeout(() => callback(null), 500);
+  }, (err) => {
+    request.get({
+      uri: uri,
+      headers: this.getHeaders()
+    }).then((res) => {
+      callback(null, res);
+    }).catch((err) => {
+      console.log('err',err)
+      callback(err, null);
+    });
+  });
+}
+
 Itunes.prototype.getCookies = function() {
   return this._cookies;
 };
